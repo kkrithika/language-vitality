@@ -13,6 +13,8 @@ var stateCensus = {
 					"name": "Lucknow",
 					"coordinates": [ 26.846511, 80.946683 ],
 					"population": "2,901,474",
+					"language": "Urdu",
+					"tweet": "1,505",
 					"sexratio": 915,
 					"literacy": 84.72
 				} 
@@ -37,6 +39,8 @@ var stateCensus = {
 					"name": "Mumbai",
 					"coordinates": [ 19.075984, 72.877656 ],
 					"population": "18,414,288",
+					"language": "Marathi",
+					"tweet":"205",
 					"sexratio": 852,
 					"literacy": 90.28
 				}
@@ -61,6 +65,8 @@ var stateCensus = {
 					"name": "Patna",
 					"coordinates": [ 25.611000, 85.144000 ],
 					"population": "2,046,652",
+					"language": "Hindi",
+					"tweet": "13,801",
 					"sexratio": 882,
 					"literacy": 84.71
 				}
@@ -85,6 +91,8 @@ var stateCensus = {
 					"name": "Kolkata",
 					"coordinates": [ 22.572646, 88.363895 ],
 					"population": "14,112,536",
+					"language": "Bengali",
+					"tweet": "152",
 					"sexratio": 899,
 					"literacy": 87.14
 				}
@@ -109,6 +117,8 @@ var stateCensus = {
 					"name": "Hyderabad",
 					"coordinates": [ 17.385044, 78.486671 ],
 					"population": "7,749,334",
+					"language": "Telugu",
+					"tweet": "127",
 					"sexratio": 945,
 					"literacy": 82.96
 				}
@@ -157,6 +167,8 @@ var stateCensus = {
 					"name": "Chennai",
 					"coordinates": [ 13.082680, 80.270718 ],
 					"population": "8,696,010",
+					"language": "Tamil",
+					"tweet": "533",
 					"sexratio": 986,
 					"literacy": 90.33
 				}
@@ -205,6 +217,8 @@ var stateCensus = {
 					"name": "Bengaluru",
 					"coordinates": [ 12.971599, 77.594563 ],
 					"population": "8,499,399",
+					"language": "Kannada",
+					"tweet": "161",
 					"sexratio": 914,
 					"literacy": 89.59
 				}
@@ -229,6 +243,8 @@ var stateCensus = {
 					"name": "Gandhinagar",
 					"coordinates": [ 23.215635, 72.636941 ],
 					"population": "208,299",
+					"language": "Gujarati",
+					"tweet": "50",
 					"sexratio": 903,
 					"literacy": 93.70
 				}
@@ -253,6 +269,8 @@ var stateCensus = {
 					"name": "Bhubaneshwar",
 					"coordinates": [ 20.296059, 85.824540 ],
 					"population": "881,988",
+					"language": "Oriya",
+					"tweet": "8",
 					"sexratio": 882,
 					"literacy": 93.15
 				}
@@ -267,6 +285,59 @@ var stateCensus = {
 
 	}, 
 
+	"PK": {
+
+		"name": "Pakistan",
+		"capital": {
+			"name": "Peshawar",
+			"details": [
+				{
+					"name": "Peshawar",
+					"coordinates": [ 34.0151, 71.5249 ],
+					"population": "1,971,988",
+					"language": "Pashto",
+					"tweet": "7",
+					"sexratio": 882,
+					"literacy": 93.15
+				}
+			]
+		},
+		"population": "41,974,218",
+		"growth": 14.05,
+		"area": 155707,
+		"density": 270,
+		"sexratio": 979,
+		"literacy": 72.87
+
+	}, 
+
+	"AD": {
+
+		"name": "Gujarat_2",
+		"capital": {
+			"name": "Adipur",
+			"details": [
+				{
+					"name": "Adipur",
+					"coordinates": [ 23.0723, 70.0890 ],
+					"population": "186,238",
+					"language": "Sindhi",
+					"tweet": "3",
+					"sexratio": 882,
+					"literacy": 93.15
+				}
+			]
+		},
+		"population": "41,974,218",
+		"growth": 14.05,
+		"area": 155707,
+		"density": 270,
+		"sexratio": 979,
+		"literacy": 72.87
+
+	}, 
+
+
 	"KL": {
 
 		"name": "Kerala",
@@ -277,6 +348,8 @@ var stateCensus = {
 					"name": "Thiruvanandhapuram",
 					"coordinates": [ 8.524139, 76.936638 ],
 					"population": "1,687,406",
+					"language": "Malayalam",
+					"tweet": "100",
 					"sexratio": 1064,
 					"literacy": 93.72
 				}
@@ -346,6 +419,8 @@ var stateCensus = {
 					"name": "Chandigarh",
 					"coordinates": [ 30.733315, 76.779418 ],
 					"population": "1,025,682",
+					"language": "Punjabi",
+					"tweet": "16",
 					"sexratio": 829,
 					"literacy": 86.77
 				}
@@ -384,6 +459,33 @@ var stateCensus = {
 
 	},
 
+	"NP": {
+
+		"name": "Nepal",
+		"capital": {
+			"name": "Kathmandu",
+			"details": [
+				{
+					"name": "Kathmandu",
+					"coordinates": [ 27.7172, 85.3240 ],
+					"population": "1,003,682",
+					"language": "Nepali",
+					"tweet": "59",
+					"sexratio": 829,
+					"literacy": 86.77
+				}
+			]
+		},
+		"language": "Punjabi",
+		"population": "27,743,338",
+		"growth": 13.89,
+		"area": 50362,
+		"density": 551,
+		"sexratio": 895,
+		"literacy": 75.84
+
+	},
+
 	"HR": {
 
 		"name": "Haryana",
@@ -407,6 +509,34 @@ var stateCensus = {
 		"literacy": 75.55
 
 	},
+
+	
+	"SL": {
+
+		"name": "Colombo",
+		"capital": {
+			"name": "Colombo",
+			"details": [
+				{
+					"name": "Colombo",
+					"coordinates": [ 6.9271, 79.8612],
+					"population": "72,817",
+					"language": "Sinhala",
+					"tweet": "13",
+					"sexratio": 818,
+					"literacy": 94.67
+				}
+			]
+		},
+		"population": "6,864,602",
+		"growth": 12.94,
+		"area": 55673,
+		"density": 123,
+		"sexratio": 972,
+		"literacy": 82.80
+
+	},
+
 
 	"DL": {
 

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  
+  <meta charset=utf-8 />
+  <title>India Census - 2011</title>
+
+  <script src='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox.js/v2.1.5/mapbox.css' rel='stylesheet' />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<style>
+
+		body { 
+            margin:0; padding:0; 
+        }
+
+    	.map { 
+            position: absolute; 
+            top:1.2; 
+            bottom:0;
+            width: 960px;
+            height: 707px;
+        }
+
+	    .map-legend i {
+	        width: 18px;
+	        height: 18px;
+	        float: left;
+	        margin-right: 8px;
+	        opacity: 0.7;
+	    }
+	    .leaflet-popup-close-button {
+	        display: none;
+	    }
+	    .leaflet-popup-content-wrapper {
+	        pointer-events: none;
+	    }
+
+	    .pie-graph, .bar-graph {
+
+	    	width: 250px;
+	    	height: 250px;
+            
+	    	border: thin solid grey;
+            background: black;
+            opacity: 1;
+            text-align: center;
+	    }
+
+        .filter-ui {
+            background: black;
+            color: white;
+            position:absolute;
+            top: 50px;
+            left: 10px;
+            z-index: 100;
+            padding: 10px;
+            border: thin solid grey;
+            border-radius:3px;
+        }
+
+        .census-banner a {
+            background: black;
+            color: #ffd700;
+            position:absolute;
+            top: 303px;
+            left: 710px;
+            z-index: 1;
+            padding: 10px;
+            font-weight: bold;
+            font-size: 24px;
+            border: thin solid grey;
+            text-decoration: none;
+            border-radius:3px;
+        }
+
+        .census-banner a:hover {
+            text-decoration: underline;
+        }
+
+	</style>
+
+</head>
+
+<body>
+
+    <nav class="navbar fixed-top navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">TweetData</a>
+            <form class="form-inline">
+                <a href="index.html">
+                <button class="btn btn-sm btn-outline-secondary" type="button">Home</button>
+                </a>
+    </nav>
+
+
+
+
+<div id='map' class='map'> </div>
+
+<script id="popup-template" type="text/template">
+    <h2>{{state}}</h2>
+    <strong>Capital: </strong>{{capital}} <br>
+    <strong>Population: </strong>{{population}} <br>
+    <strong>Area: </strong>{{area}} square kilometer <br>
+    <strong>Density: {{density}}</strong> people per square kilometer <br>
+    <strong>Growth: </strong>{{growth}} % <br>
+</script>
+
+<!-- <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script type="text/javascript" src="census-2011.js"></script>
+
+<script>
+    L.mapbox.accessToken = 'pk.eyJ1IjoiaW5pdGRvdCIsImEiOiJ3VkkxTldvIn0.7UPZ8q9fgBE70dMV7e0sLw';
+
+    var map = L.mapbox.map('map', 'initdot.ljplbdcp').setView([21.836006, 87.824707], 5),
+        // color reference from color brewer
+        mapBrew = ['rgb(255,255,204)','rgb(217,240,163)','rgb(173,221,142)','rgb(120,198,121)','rgb(65,171,93)','rgb(35,132,67)','rgb(0,90,50)'],
+        // population density range used for choropleth and legend
+        mapRange = [ 5000, 1000, 800, 500, 300, 100, 0 ]; 
+
+   
+    // fetch the state geojson data
+
+    d3.json( indiaCensus, function (statesData) {
+        statesLayer = L.geoJson(statesData,  {
+            style: getStyle,
+            onEachFeature: onEachFeature
+        }).addTo(map);
+    } );
+
+
+    function getStyle(feature) {
+        return {
+            weight: 2,
+            opacity: 0.1,
+            color: 'black',
+            fillOpacity: 0.85,
+            fillColor: getDensityColor( indiaCensus.states[feature.properties.code].density )
+        };
+    }
+
+    // get color depending on population density value
+    function getDensityColor(d) {
+        var colors = Array.prototype.slice.call(mapBrew).reverse(), // creates a copy of the mapBrew array and reverses it
+             range = mapRange;
+
+        return  d > range[0] ? colors[0] :
+                d > range[1] ? colors[1] :
+                d > range[2] ? colors[2] :
+                d > range[3] ? colors[3] :
+                d > range[4] ? colors[4] :
+                d > range[5] ? colors[5] :
+                colors[6];
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mousemove: mousemove,
+            mouseout: mouseout,
+            //click: zoomToFeature
+        });
+    }
+
+    function mousemove(e) {    
+        var layer = e.target;
+
+        var popupData = {
+            state: indiaCensus.states[layer.feature.properties.code].name,
+            density: indiaCensus.states[layer.feature.properties.code].density,
+            area: indiaCensus.states[layer.feature.properties.code].area,
+            growth: indiaCensus.states[layer.feature.properties.code].growth,
+            population: indiaCensus.states[layer.feature.properties.code].population,
+            capital: indiaCensus.states[layer.feature.properties.code].capital.name 
+        };
+
+        popup.setLatLng(e.latlng);
+
+        var popContent = L.mapbox.template( d3.select("#popup-template").text() , popupData );
+        popup.setContent( popContent );
+
+        if (!popup._map) popup.openOn(map);
+        window.clearTimeout(closeTooltip);
+
+        // highlight feature
+        layer.setStyle({
+            weight: 2,
+            opacity: 0.3,
+            fillOpacity: 0.9
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera) {
+            layer.bringToFront();
+        }
+        // update the graph with literacy and sex ratio data
+        updateGraph( indiaCensus.states[layer.feature.properties.code] );
+    }
+
+    function mouseout(e) {
+        statesLayer.resetStyle(e.target);
+        closeTooltip = window.setTimeout(function() {
+            // ref: https://www.mapbox.com/mapbox.js/api/v2.1.6/l-map-class/
+            map.closePopup( popup ); // close only the state details popup
+        }, 100);
+    }
+
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds());
+    }
+
+    function getLegendHTML() {
+        var grades = Array.prototype.slice.call(mapRange).reverse(), // creates a copy of ranges and reverses it
+            labels = [],
+            from, to;
+        // color reference from color brewer
+        var brew = mapBrew;
+
+        for (var i = 0; i < grades.length; i++) {
+            from = grades[i];
+            to = grades[i + 1];
+
+            labels.push(
+                '<i style="background:' + brew[i] + '"></i> ' +
+                from + (to ? '&ndash;' + to : '+'));
+        }
+
+        return '<span>People per square km</span><br>' + labels.join('<br>');
+    }
+
+
+    // draw the layer with capital markers
+    var capitalLayer;
+
+    drawCapitalMarkers();
+
+    // add the capitals toggle checkbox
+    var capitalFilter = document.getElementById("capitals-filter"),
+        capitalFilterDiv = document.getElementById("capitals-filter-div");
+
+    capitalFilter.addEventListener("change", function(){
+        this.checked ? map.addLayer(capitalLayer) : map.removeLayer(capitalLayer);
+    });
+
+    setCapitalFilterPosition();
+
+    function drawCapitalMarkers () {
+        var capitalGeoJson = [];
+
+        for (var state in indiaCensus.states) {
+            var capitalData = indiaCensus.states[state].capital;
+            // capital marker geojson data
+            capitalData.details.forEach( function ( capital, index ) {
+                // location is normally in (latitude, longitude) format
+                // but for geojson the format is  (longitude, latitude)
+                capitalGeoJson.push({
+                    "type": "Feature",
+                    "geometry": {
+                      "type": "Point",
+                      // make an array copy and reverse the co-ordinates to (long,lat) for geojson
+                      "coordinates": Array.prototype.slice.call(capital.coordinates).reverse()
+                    },
+                    "properties": {
+                      "title": capital.name,
+                      "description": capital.language ? "<strong>Language: </strong>" + capital.language +  "<br><strong>Tweet: </strong>" + capital.tweet + "<br><strong>Population: </strong>" + capital.population : "(census data not available)",
+                      "data": capital,
+                      "marker-color": "#7DE88F",
+                      "marker-size": "small",
+                      "marker-symbol": "star"
+                    }
+                });
+            } ); // end of 'forEach'
+        } // end of 'for in'
+
+        // add the marker layer
+        capitalLayer = L.mapbox.featureLayer( capitalGeoJson ).addTo( map );
+        // open the popup on hover
+        capitalLayer.on('mouseover', function(e) {      
+            e.layer.openPopup();
+            // update the graph if census details is present
+            if (e.layer.feature.properties.data.sexratio) {
+                updateGraph( e.layer.feature.properties.data );
+            }
+        });
+
+        capitalLayer.on('mouseout', function(e) {
+            e.layer.closePopup();
+        });
+    }   
+
+    function setCapitalFilterPosition () {
+        var gistWidth = 960,
+            gistHeight = 707; 
+        capitalFilterDiv.style.top = 0.5*gistHeight + "px";
+        capitalFilterDiv.style.left = 0.78*gistWidth + "px";
+        // adjust the defalut gist preview height
+        d3.select(self.frameElement).style("height", gistHeight + "px");
+    }
+
+</script>
+
+</body>
+</html>
